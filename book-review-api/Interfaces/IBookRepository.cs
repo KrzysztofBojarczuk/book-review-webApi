@@ -9,8 +9,8 @@ namespace book_review_api.Interfaces
         Task<Book> GetBookAsync(string name);
         Task<bool> CreateBookAsync(Book book);
         Task<bool> BookExists(int bookId);
-        bool UpdateBook(Book book);
-        bool DeleteBook(Book book);
+        Task<bool> UpdateBook(Book book);
+        Task<bool> DeleteBookAsync(Book book);
        Task<bool> SaveAsync();
     }
 }

@@ -20,9 +20,10 @@ namespace book_review_api.Repository
             return await SaveAsync();
         }
 
-        public bool DeleteBook(Book book)
+        public async Task<bool> DeleteBookAsync(Book book)
         {
-            throw new NotImplementedException();
+             _context.Remove(book);
+            return await SaveAsync();
         }
 
         public async Task<Book> GetBookAsync(int id)

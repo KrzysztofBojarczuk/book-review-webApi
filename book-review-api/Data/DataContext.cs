@@ -11,5 +11,7 @@ namespace book_review_api.Data
         }
 
         public DbSet<Book> Books { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Reviewer> Reviewers { get; set; }
     }
 }

@@ -70,5 +70,24 @@ namespace book_review_api.Controllers
 
             return Ok("Successfully created");
         }
+        [HttpDelete("{bookId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteBook(int bookId)
+        {
+            var idBook = await _bookRepository.BookExists(bookId);
+
+            var bookToDelete = await _bookRepository.GetBookAsync(bookId);
+            if (!idBook)
+            {
+                return NotFound("nie znaleziono");
+            }
+
+
+            _bookRepository.DeleteBookAsync(bookToDelete);
+
+            return NoContent();
+        }
     }
 }
