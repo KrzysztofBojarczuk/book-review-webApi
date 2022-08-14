@@ -71,6 +71,46 @@ namespace book_review_api.Controllers
 
             return Ok("Successfully created");
         }
+
+        [HttpPut("{bookId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> UpdateBook(int bookId, [FromQuery] int ownerId, [FromQuery] int carId, [FromBody] BookDto updatedBook)
+        {
+            if (updatedBook == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (bookId != updatedBook.Id)
+            {
+                return BadRequest(ModelState);
+            }
+            var bookGet = _bookRepository.BookExists(bookId);
+            if (bookGet == null)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var bookMap = _mapper.Map<Book>(updatedBook);
+
+            var bookGetMap = _bookRepository.UpdateBook(ownerId, carId, bookMap);
+
+            if (bookGetMap == null)
+            {
+                ModelState.AddModelError("", "Something went wrong updating owner");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
         [HttpDelete("{bookId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]

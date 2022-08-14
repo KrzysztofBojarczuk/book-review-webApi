@@ -48,12 +48,13 @@ namespace book_review_api.Repository
         public async Task<bool> SaveAsync()
         {
             var saved = await _context.SaveChangesAsync();
-            return saved > 0 ? true : false;
+            return  saved > 0 ? true : false;
         }
 
-        public Task<bool> UpdateBook(Book book)
+        public async Task<bool> UpdateBook(int ownerId, int categoryId,Book book)
         {
-            throw new NotImplementedException();
+            _context.Update(book);
+            return await SaveAsync();
         }
 
         
