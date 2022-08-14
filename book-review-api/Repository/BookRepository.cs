@@ -51,10 +51,11 @@ namespace book_review_api.Repository
             return saved > 0 ? true : false;
         }
 
-        public bool UpdateBook(Book book)
+        public Task<bool> UpdateBook(Book book)
         {
             throw new NotImplementedException();
         }
 
+        
     }
 }

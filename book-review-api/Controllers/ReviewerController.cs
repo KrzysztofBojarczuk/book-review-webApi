@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using book_review_api.Dto.ReviewDto;
 using book_review_api.Dto.Reviewer;
 using book_review_api.Interfaces;
 using book_review_api.Models;
@@ -10,25 +9,16 @@ namespace book_review_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReviewController : ControllerBase
+    public class ReviewerController : ControllerBase
     {
-        private readonly IReviewRepository _reviewRepository;
-        private readonly IMapper _mapper;
         private readonly IReviewerRepository _reviewerRepository;
-        private readonly IBookRepository _bookRepository;
+        private readonly IMapper _mapper;
 
-        public ReviewController(IReviewRepository reviewRepository,
-            IMapper mapper,
-            IBookRepository bookRepository,
-            IReviewerRepository reviewerRepository)
+        public ReviewerController(IReviewerRepository reviewerRepository, IMapper mapper)
         {
-            _reviewRepository = reviewRepository;
-            _mapper = mapper;
             _reviewerRepository = reviewerRepository;
-            _bookRepository = bookRepository;
+            _mapper = mapper;
         }
-
-
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Reviewer>))]
         public async Task<IActionResult> GetReviewers()
@@ -42,24 +32,23 @@ namespace book_review_api.Controllers
             return Ok(reviewers);
         }
 
-        [HttpGet("{reviewId}")]
-        [ProducesResponseType(200, Type = typeof(Review))]
+        [HttpGet("{reviewerId}")]
+        [ProducesResponseType(200, Type = typeof(Reviewer))]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetBook(int reviewId)
+        public async Task<IActionResult> GetBook(int reviewerId)
         {
-            var reviewAny = await _reviewRepository.ReviewExists(reviewId);
-            if (reviewAny == null)
+            var reviwerAny = await _reviewerRepository.ReviewerExists(reviewerId);
+            if (reviwerAny == null)
                 return NotFound("Smutek");
 
-            var reviewGet = await _reviewRepository.GetReview(reviewId);
-            var review = _mapper.Map<ReviewDto>(reviewGet);
+            var revieverGet = await _reviewerRepository.GetReviewer(reviewerId);
+            var reviewer = _mapper.Map<ReviewerDto>(revieverGet);
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            return Ok(review);
+            return Ok(reviewer);
         }
-
 
     }
 }

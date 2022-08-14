@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using book_review_api.Dto;
+using book_review_api.Dto.Reviewer;
 using book_review_api.Interfaces;
 using book_review_api.Models;
 using Microsoft.AspNetCore.Http;
