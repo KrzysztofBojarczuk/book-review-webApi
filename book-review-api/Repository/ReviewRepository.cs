@@ -46,9 +46,10 @@ namespace book_review_api.Repository
 
       
 
-        public Task<ICollection<Review>> GetReviewsOfABook(int pokeId)
+        public async Task<ICollection<Review>> GetReviewsOfABook(int pokeId)
         {
-            throw new NotImplementedException();
+
+            return await _context.Reviews.Where(r => r.Book.Id == pokeId).ToListAsync();
         }
 
         public async Task<bool> ReviewExists(int reviewId)

@@ -59,6 +59,19 @@ namespace book_review_api.Controllers
 
             return Ok(review);
         }
+        [HttpGet("book/{bookId}")]
+        [ProducesResponseType(200, Type = typeof(Review))]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetReviewsForABook(int bookId)
+        {
+            var reviewsGet = await _reviewRepository.GetReviewsOfABook(bookId);
+            var reviews = _mapper.Map<IEnumerable<ReviewDto>>(reviewsGet);
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            return Ok(reviews);
+        }
 
 
     }
