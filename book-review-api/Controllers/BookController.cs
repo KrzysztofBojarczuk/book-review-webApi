@@ -100,7 +100,7 @@ namespace book_review_api.Controllers
 
             var bookMap = _mapper.Map<Book>(updatedBook);
 
-            var bookGetMap = _bookRepository.UpdateBook(ownerId, carId, bookMap);
+            var bookGetMap = await _bookRepository.UpdateBook(ownerId, carId, bookMap);
 
             if (bookGetMap == null)
             {
