@@ -43,8 +43,8 @@ namespace book_review_api.Controllers
 
             var book = await _bookRepository.GetBookAsync(bookId);
 
-            //if (book == null)
-            //    return NotFound();
+            if (book == null)
+                return NotFound();
 
             var bookMap = _mapper.Map<BookDto>(book);
 
@@ -60,13 +60,13 @@ namespace book_review_api.Controllers
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
 
-        public async Task<IActionResult> CreateBook([FromBody] BookCreateDto bookCreate)
+        public async Task<IActionResult> CreateBook([FromQuery] int ownerId, [FromQuery] int catId, [FromBody] BookCreateDto bookCreate)
         {
             if (bookCreate == null)
                 return BadRequest(ModelState);
 
             var bookMap = _mapper.Map<Book>(bookCreate);
-            await _bookRepository.CreateBookAsync(bookMap);
+            await _bookRepository.CreateBookAsync(ownerId,catId, bookMap);
 
 
             return Ok("Successfully created");
@@ -76,18 +76,19 @@ namespace book_review_api.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> UpdateBook(int bookId, [FromQuery] int ownerId, [FromQuery] int carId, [FromBody] BookDto updatedBook)
+        public async Task<IActionResult> UpdateBook(int bookId, [FromQuery] int ownerId, [FromQuery] int carId, [FromBody] BookCreateDto updatedBook)
         {
             if (updatedBook == null)
             {
                 return BadRequest(ModelState);
             }
 
-            if (bookId != updatedBook.Id)
-            {
-                return BadRequest(ModelState);
-            }
+            //if (bookId != updatedBook)
+            //{
+            //    return BadRequest(ModelState);
+            //}
             var bookGet = _bookRepository.BookExists(bookId);
+
             if (bookGet == null)
             {
                 return NotFound();
@@ -118,6 +119,8 @@ namespace book_review_api.Controllers
         public async Task<IActionResult> DeleteBook(int bookId)
         {
             var idBook = await _bookRepository.BookExists(bookId);
+
+
 
             var bookToDelete = await _bookRepository.GetBookAsync(bookId);
             if (!idBook)

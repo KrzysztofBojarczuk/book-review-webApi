@@ -14,8 +14,24 @@ namespace book_review_api.Repository
             _context = context;
         }
 
-        public async Task<bool> CreateBookAsync(Book book)
+        public async Task<bool> CreateBookAsync(int ownerId, int categoryId, Book book)
         {
+            var bookOwnerEntity = await _context.Owners.Where(a => a.Id == ownerId).FirstOrDefaultAsync();
+            var category = await _context.Categories.Where(a => a.Id == categoryId).FirstOrDefaultAsync();
+
+            var bookOwner = new BookOwner()
+            {
+                Owner = bookOwnerEntity,
+                Book = book,
+            };
+
+            _context.AddAsync(bookOwner);
+            var bookCategory = new BookCategory()
+            {
+                Category = category,
+                Book = book,
+            };
+            await _context.AddAsync(bookCategory);
             await _context.Books.AddAsync(book);
             return await SaveAsync();
         }
@@ -38,7 +54,7 @@ namespace book_review_api.Repository
         
         public async Task<ICollection<Book>> GetBooksAsync()
         {
-            return await _context.Books.ToListAsync();
+            return await _context.Books.OrderBy(p => p.Id).ToListAsync();
         }
         public async Task<bool> BookExists(int bookId)
         {
