@@ -32,5 +32,32 @@ namespace book_review_api.Controllers
 
             return Ok(categories);
         }
+        [HttpDelete("{categoryId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteCategory(int categoryId)
+        {
+            var categoryGet = await _categoryRepository.CategoryExists(categoryId);
+            if (!categoryGet)
+            {
+                return NotFound("No Objects!!!!!!!!!!");
+            }
+
+            var categoryToDelete = await _categoryRepository.GetCategory(categoryId);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var cat = await _categoryRepository.DeleteCategory(categoryToDelete);
+
+            if (!cat)
+            {
+                ModelState.AddModelError("", "Something went wrong deleting category");
+            }
+            return NoContent();
+
+        }
     }
 }

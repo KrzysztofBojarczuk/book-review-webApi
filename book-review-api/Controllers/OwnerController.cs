@@ -35,6 +35,34 @@ namespace book_review_api.Controllers
 
             return Ok(owners);
         }
+        [HttpDelete("{ownerId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteOwner(int ownerId)
+        {
+            var getOwner = await _ownerRepository.OwnerExistsAsync(ownerId);
+
+            if (!getOwner)
+            {
+                return NotFound("No Objects!!!!!!!!!!");
+            }
+
+            var ownerToDelete = await _ownerRepository.GetOwner(ownerId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var getOwnerToDelete = await _ownerRepository.DeleteOwnerAsync(ownerToDelete);
+            if (getOwnerToDelete == null)
+            {
+                ModelState.AddModelError("", "Something went wrong deleting owner");
+            }
+
+            return NoContent();
+        }
 
     }
 }

@@ -36,11 +36,6 @@ namespace book_review_api.Repository
             return await SaveAsync();
         }
 
-        public async Task<bool> DeleteBookAsync(Book book)
-        {
-             _context.Remove(book);
-            return await SaveAsync();
-        }
 
         public async Task<Book> GetBookAsync(int id)
         {
@@ -73,6 +68,11 @@ namespace book_review_api.Repository
             return await SaveAsync();
         }
 
-        
+        public async Task<bool> DeleteBookAsync(Book book)
+        {
+            _context.Remove(book);
+            return await SaveAsync();
+        }
+
     }
 }

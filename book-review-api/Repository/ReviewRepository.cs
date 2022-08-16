@@ -34,17 +34,7 @@ namespace book_review_api.Repository
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteReview(Review review)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> DeleteReviews(List<Review> reviews)
-        {
-            throw new NotImplementedException();
-        }
-
-      
+  
 
         public async Task<ICollection<Review>> GetReviewsOfABook(int pokeId)
         {
@@ -57,14 +47,30 @@ namespace book_review_api.Repository
             return await _context.Reviews.AnyAsync(r => r.Id == reviewId);
         }
 
-        public Task<bool> Save()
+        public async Task<bool> SaveAsync()
         {
-            throw new NotImplementedException();
+            var saved = await _context.SaveChangesAsync();
+            return saved > 0 ? true : false;
         }
 
         public Task<bool> UpdateReview(Review review)
         {
             throw new NotImplementedException();
         }
+
+
+        public async Task<bool> DeleteReview(Review review)
+        {
+            _context.Remove(review);
+            return await SaveAsync();
+        }
+
+        public async Task<bool> DeleteReviews(List<Review> reviews)
+        {
+            _context.RemoveRange(reviews);
+            return await SaveAsync();
+        }
+
+
     }
 }

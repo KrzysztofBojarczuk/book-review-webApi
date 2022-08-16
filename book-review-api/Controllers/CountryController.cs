@@ -32,6 +32,32 @@ namespace book_review_api.Controllers
 
             return Ok(countries);
         }
+        [HttpDelete("{countryId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> DeleteCountry(int countryId)
+        {
+            var countries = await _countryRepository.CountryExists(countryId);
+
+            if (!countries)
+            {
+                return NotFound("No Objects!!!!!!!!!!");
+            }
+
+            var countryToDelete = await _countryRepository.GetCountry(countryId);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var getCountry = await _countryRepository.DeleteCountry(countryToDelete);
+            if (!getCountry)
+            {
+                ModelState.AddModelError("", "Something went wrong deleting category");
+            }
+            return NoContent();
+        }
 
     }
 }

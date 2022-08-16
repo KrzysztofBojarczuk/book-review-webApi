@@ -10,7 +10,7 @@ namespace book_review_api.Interfaces
         Task<bool> ReviewerExists(int reviewerId);
         Task<bool> CreateReviewer(Reviewer reviewer);
         Task<bool> UpdateReviewer(Reviewer reviewer);
-        Task<bool> DeleteReviewer(List<Reviewer> reviewer);
-        Task<bool> Save();
+        Task<bool> DeleteReviewer(Reviewer reviewer);
+        Task<bool> SaveAsync();
     }
 }

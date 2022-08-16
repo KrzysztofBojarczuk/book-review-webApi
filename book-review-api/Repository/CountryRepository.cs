@@ -21,9 +21,9 @@ namespace book_review_api.Repository
             return await _context.Countries.ToListAsync();
         }
 
-        public Task<bool> CountryExists(int id)
+        public async Task<bool> CountryExists(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Countries.AnyAsync(c => c.Id == id);
         }
 
         public Task<bool> CreateCountry(Country country)
@@ -31,11 +31,7 @@ namespace book_review_api.Repository
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteCountry(Country country)
-        {
-            throw new NotImplementedException();
-        }
-       
+    
 
         public Task<Country> GetCountry(int id)
         {
@@ -63,5 +59,12 @@ namespace book_review_api.Repository
             _context.Update(country);
             return await SaveAsync();
         }
+
+        public async Task<bool> DeleteCountry(Country country)
+        {
+            _context.Remove(country);
+            return await SaveAsync();
+        }
+
     }
 }

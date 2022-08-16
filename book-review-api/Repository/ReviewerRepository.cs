@@ -26,10 +26,7 @@ namespace book_review_api.Repository
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteReviewer(List<Reviewer> reviewer)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public async Task<Reviewer> GetReviewer(int reviewerId)
         {
@@ -47,14 +44,20 @@ namespace book_review_api.Repository
             return await _context.Reviewers.AnyAsync(r => r.Id == reviewerId);
         }
 
-        public Task<bool> Save()
+        public async Task<bool> SaveAsync()
         {
-            throw new NotImplementedException();
+            var saved = await _context.SaveChangesAsync();
+            return saved > 0 ? true : false;
         }
 
         public Task<bool> UpdateReviewer(Reviewer reviewer)
         {
             throw new NotImplementedException();
+        }
+        public async Task<bool> DeleteReviewer(Reviewer reviewer)
+        {
+            _context.Remove(reviewer);
+            return await SaveAsync();
         }
     }
 }

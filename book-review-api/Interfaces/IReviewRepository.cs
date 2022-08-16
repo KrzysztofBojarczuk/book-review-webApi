@@ -13,6 +13,6 @@ namespace book_review_api.Interfaces
         Task<bool> UpdateReview(Review review);
         Task<bool> DeleteReview(Review review);
         Task<bool> DeleteReviews(List<Review> reviews);
-        Task<bool> Save();
+        Task<bool> SaveAsync();
     }
 }

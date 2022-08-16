@@ -50,5 +50,34 @@ namespace book_review_api.Controllers
             return Ok(reviewer);
         }
 
+        [HttpDelete("{reviewerId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+
+        public async Task<IActionResult> DeleteReviewer(int reviewerId)
+        {
+            var getReviewer = await _reviewerRepository.ReviewerExists(reviewerId);
+
+            if (!getReviewer)
+            {
+                return NotFound("No Objects!!!!!!!!!!");
+            }
+            var revieverToDelete = await _reviewerRepository.GetReviewer(reviewerId);
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+
+            }
+            var reviewer = await _reviewerRepository.DeleteReviewer(revieverToDelete);
+            if (!reviewer)
+            {
+                ModelState.AddModelError("", "Something went wrong deleting reviewer");
+            }
+            return NoContent();
+
+        }
+
     }
 }

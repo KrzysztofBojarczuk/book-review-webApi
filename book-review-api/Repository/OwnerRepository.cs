@@ -34,13 +34,6 @@ namespace book_review_api.Repository
             return await SaveAsync();
 
         }
-
-        public async Task<bool> DeleteOwnerAsync(Owner owner)
-        {
-            _context.Remove(owner);
-            return await SaveAsync();
-        }    
-
         public async Task<ICollection<Owner>> GetOwnerOfABook(int bookId)
         {
             return await _context.BookOwners.Where(p => p.Book.Id == bookId).Select(o => o.Owner).ToListAsync();
@@ -62,5 +55,12 @@ namespace book_review_api.Repository
              _context.Update(owner);
             return await SaveAsync();
         }
+
+        public async Task<bool> DeleteOwnerAsync(Owner owner)
+        {
+            _context.Remove(owner);
+            return await SaveAsync();
+        }
+
     }
 }

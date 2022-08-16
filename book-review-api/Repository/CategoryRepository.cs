@@ -17,21 +17,15 @@ namespace book_review_api.Repository
             return await _context.Categories.ToListAsync();
         }
 
-        public Task<bool> CategoryExists(int id)
+        public async Task<bool> CategoryExists(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Categories.AnyAsync(c => c.Id == id);
         }
 
         public Task<bool> CreateCategory(Category category)
         {
             throw new NotImplementedException();
         }
-
-        public Task<bool> DeleteCategory(Category category)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<ICollection<Book>> GetBookByCategory(int categoryId)
         {
             throw new NotImplementedException();
@@ -53,6 +47,11 @@ namespace book_review_api.Repository
         public async Task<bool> UpdateCategory(Category category)
         {
             _context.Update(category);
+            return await SaveAsync();
+        }
+        public async Task<bool> DeleteCategory(Category category)
+        {
+            _context.Remove(category);
             return await SaveAsync();
         }
     }
