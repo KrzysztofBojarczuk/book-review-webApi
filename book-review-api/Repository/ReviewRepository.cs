@@ -29,9 +29,10 @@ namespace book_review_api.Repository
         {
             return await _context.Reviews.Where(r => r.Id == reviewId).FirstOrDefaultAsync();
         }
-        public Task<bool> CreateReview(Review review)
+        public async Task<bool> CreateReview(Review review)
         {
-            throw new NotImplementedException();
+            _context.Add(review);
+            return await SaveAsync();
         }
 
   

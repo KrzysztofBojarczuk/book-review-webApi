@@ -22,20 +22,21 @@ namespace book_review_api.Repository
             return await _context.Categories.AnyAsync(c => c.Id == id);
         }
 
-        public Task<bool> CreateCategory(Category category)
+        public async Task<bool> CreateCategory(Category category)
         {
-            throw new NotImplementedException();
+            await _context.Categories.AddAsync(category);
+            return await SaveAsync();
         }
-        public Task<ICollection<Book>> GetBookByCategory(int categoryId)
+        public async Task<ICollection<Book>> GetBookByCategory(int categoryId)
         {
-            throw new NotImplementedException();
+           return await _context.BookCategories.Where(e => e.BookId == categoryId).Select(x => x.Book).ToListAsync();
         }
 
      
 
-        public Task<Category> GetCategory(int id)
+        public async Task<Category> GetCategory(int id)
         {
-            throw new NotImplementedException();
+          return await _context.Categories.Where(c => c.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<bool> SaveAsync()

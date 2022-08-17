@@ -1,4 +1,5 @@
 ﻿using book_review_api.Data;
+using book_review_api.Dto;
 using book_review_api.Interfaces;
 using book_review_api.Models;
 using Microsoft.EntityFrameworkCore;
@@ -73,6 +74,15 @@ namespace book_review_api.Repository
             _context.Remove(book);
             return await SaveAsync();
         }
+ 
+        public async Task<Book> GetBookTrimToUpper(BookCreateDto bookCreate)
+        {
+            var get = await GetBooksAsync();
+            var lol = get.Where(c => c.Name.Trim().ToUpper() == bookCreate.Name.TrimEnd().ToUpper())
+             .FirstOrDefault();
 
+       
+            return lol;
+        }
     }
 }

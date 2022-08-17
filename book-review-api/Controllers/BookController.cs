@@ -65,8 +65,22 @@ namespace book_review_api.Controllers
             if (bookCreate == null)
                 return BadRequest(ModelState);
 
+            var books = await _bookRepository.GetBookTrimToUpper(bookCreate);
+
+            if (books != null)
+            {
+                ModelState.AddModelError("", "Owner already exists");
+                return StatusCode(422, ModelState);
+            }
+
             var bookMap = _mapper.Map<Book>(bookCreate);
-            await _bookRepository.CreateBookAsync(ownerId,catId, bookMap);
+            var getbookMap = await _bookRepository.CreateBookAsync(ownerId,catId, bookMap);
+            if (!getbookMap)
+            {
+                ModelState.AddModelError("", "Something went wrong while savin");
+                return StatusCode(500, ModelState);
+            }
+
 
 
             return Ok("Successfully created");
@@ -129,7 +143,7 @@ namespace book_review_api.Controllers
             }
 
 
-            _bookRepository.DeleteBookAsync(bookToDelete);
+            await _bookRepository.DeleteBookAsync(bookToDelete);
 
             return NoContent();
         }

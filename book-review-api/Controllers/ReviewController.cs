@@ -73,6 +73,74 @@ namespace book_review_api.Controllers
             return Ok(reviews);
         }
 
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> CreateReview([FromQuery] int reviewerId, [FromQuery] int bookId, [FromBody] ReviewCreateDto reviewCreate)
+        {
+            if (reviewCreate == null)
+                return BadRequest(ModelState);
+
+            var reviews = _reviewRepository.GetReviews();
+
+                //.Where(c => c.Title.Trim().ToUpper() == reviewCreate.Title.TrimEnd().ToUpper())
+                //.FirstOrDefault();
+
+            if (reviews != null)
+            {
+                ModelState.AddModelError("", "Review already exists");
+                return StatusCode(422, ModelState);
+            }
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var reviewMap = _mapper.Map<Review>(reviewCreate);
+
+            reviewMap.Book = await _bookRepository.GetBookAsync(bookId);
+            reviewMap.Reviewer = await _reviewerRepository.GetReviewer(reviewerId);
+
+            var getRevi = await _reviewRepository.CreateReview(reviewMap);
+            if (!getRevi)
+            {
+                ModelState.AddModelError("", "Something went wrong while savin");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Successfully created");
+        }
+
+        [HttpPut("{reviewId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> UpdateReview(int reviewId, [FromBody] ReviewDto updatedReview)
+        {
+            if (updatedReview == null)
+                return BadRequest(ModelState);
+
+            if (reviewId != updatedReview.Id)
+                return BadRequest(ModelState);
+
+            var getReview = await _reviewRepository.ReviewExists(reviewId);
+            if (!getReview)
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            var reviewMap = _mapper.Map<Review>(updatedReview);
+
+            var getReviewMapped = await _reviewRepository.UpdateReview(reviewMap);
+            if (!getReviewMapped)
+            {
+                ModelState.AddModelError("", "Something went wrong updating review");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
         [HttpDelete("{ownerId}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
