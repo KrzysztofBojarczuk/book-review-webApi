@@ -47,7 +47,7 @@ namespace book_review_api.Repository
         {
             return await _context.Books.Where(x => x.Name == name).FirstOrDefaultAsync();
         }
-        
+
         public async Task<ICollection<Book>> GetBooksAsync()
         {
             return await _context.Books.OrderBy(p => p.Id).ToListAsync();
@@ -60,10 +60,10 @@ namespace book_review_api.Repository
         public async Task<bool> SaveAsync()
         {
             var saved = await _context.SaveChangesAsync();
-            return  saved > 0 ? true : false;
+            return saved > 0 ? true : false;
         }
 
-        public async Task<bool> UpdateBook(int ownerId, int categoryId,Book book)
+        public async Task<bool> UpdateBook(int ownerId, int categoryId, Book book)
         {
             _context.Update(book);
             return await SaveAsync();
@@ -74,15 +74,18 @@ namespace book_review_api.Repository
             _context.Remove(book);
             return await SaveAsync();
         }
- 
+
+
+
         public async Task<Book> GetBookTrimToUpper(BookCreateDto bookCreate)
         {
             var get = await GetBooksAsync();
             var lol = get.Where(c => c.Name.Trim().ToUpper() == bookCreate.Name.TrimEnd().ToUpper())
              .FirstOrDefault();
 
-       
+
             return lol;
         }
+
     }
 }

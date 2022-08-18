@@ -26,26 +26,27 @@ namespace book_review_api.Repository
             return await _context.Countries.AnyAsync(c => c.Id == id);
         }
 
-        public Task<bool> CreateCountry(Country country)
+        public async Task<bool> CreateCountry(Country country)
         {
-            throw new NotImplementedException();
+             _context.AddAsync(country);
+            return await SaveAsync();
         }
 
     
 
-        public Task<Country> GetCountry(int id)
+        public async Task<Country> GetCountry(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Countries.Where(c => c.Id == id).FirstOrDefaultAsync();
         }
 
-        public Task<Country> GetCountryByOwner(int ownerId)
+        public async Task<Country> GetCountryByOwner(int ownerId)
         {
-            throw new NotImplementedException();
+            return await _context.Owners.Where(o => o.Id == ownerId).Select(c => c.Country).FirstOrDefaultAsync();
         }
 
-        public Task<ICollection<Owner>> GetOwnersFromACountry(int countryId)
+        public async Task<ICollection<Owner>> GetOwnersFromACountry(int countryId)
         {
-            throw new NotImplementedException();
+            return await _context.Owners.Where(c => c.Country.Id == countryId).ToListAsync();
         }
 
         public async Task<bool> SaveAsync()

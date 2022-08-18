@@ -21,9 +21,10 @@ namespace book_review_api.Repository
         {
             return await _context.Reviewers.ToListAsync();
         }
-        public Task<bool> CreateReviewer(Reviewer reviewer)
+        public async Task<bool> CreateReviewer(Reviewer reviewer)
         {
-            throw new NotImplementedException();
+            _context.Add(reviewer);
+            return await SaveAsync();
         }
 
        
@@ -34,9 +35,9 @@ namespace book_review_api.Repository
         }
 
 
-        public Task<ICollection<Review>> GetReviewsByReviewer(int reviewerId)
+        public async Task<ICollection<Review>> GetReviewsByReviewer(int reviewerId)
         {
-            throw new NotImplementedException();
+            return await _context.Reviews.Where(r => r.Reviewer.Id == reviewerId).ToListAsync();
         }
 
         public async Task<bool> ReviewerExists(int reviewerId)
@@ -50,9 +51,10 @@ namespace book_review_api.Repository
             return saved > 0 ? true : false;
         }
 
-        public Task<bool> UpdateReviewer(Reviewer reviewer)
+        public async Task<bool> UpdateReviewer(Reviewer reviewer)
         {
-            throw new NotImplementedException();
+            _context.Update(reviewer);
+            return await SaveAsync();
         }
         public async Task<bool> DeleteReviewer(Reviewer reviewer)
         {

@@ -54,9 +54,10 @@ namespace book_review_api.Repository
             return saved > 0 ? true : false;
         }
 
-        public Task<bool> UpdateReview(Review review)
+        public async Task<bool> UpdateReview(Review review)
         {
-            throw new NotImplementedException();
+            _context.Update(review);
+            return await SaveAsync();
         }
 
 
